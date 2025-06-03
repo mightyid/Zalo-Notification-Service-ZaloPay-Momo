@@ -12,11 +12,12 @@ To run this module successfully, you must define the following environment varia
 
 ### Required Variables
 
-| Variable          | Description                                 |
-| ----------------- | ------------------------------------------- |
-| `ZALO_APP_ID`     | Your Zalo Official Account (OA) App ID      |
-| `ZALO_APP_SECRET` | The secret key associated with your OA App  |
-| `REDIS_PORT`      | Port number used by Redis (default: `6379`) |
+| Variable          | Description                                  |
+| ----------------- | -------------------------------------------- |
+| `ZALO_APP_ID`     | Your Zalo Official Account (OA) App ID       |
+| `ZALO_APP_SECRET` | The secret key associated with your OA App   |
+| `REDIS_PORT`      | Port number used by Redis (default: `6379`)  |
+| `PORT`            | Port number used by server (default: `3000`) |
 
 ## Compile and run the project
 
