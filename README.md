@@ -22,10 +22,10 @@ To run this module successfully, you must define the following environment varia
 | `APP_ID`                     | ZaloPay application ID provided when registering for integration.             |
 | `KEY1`                       | MAC Key 1 provided by ZaloPay when registering application                    |
 | `KEY2`                       | MAC Key 2 provided by ZaloPay when registering application                    |
-| `CREATE_ENDPOINT`            | Endpoint for creating a payment order.                                        |
-| `REFUND_ENDPOINT`            | Endpoint for initiating a refund.                                             |
-| `QUERY_STATUS_ENDPOINT`      | Endpoint for querying the status of a payment order.                          |
-| `QUERY_REFUND_ENDPOINT`      | Endpoint for querying the status of a refund request.                         |
+| `ZALO_CREATE_ENDPOINT`       | Endpoint for creating a payment transaction.                                  |
+| `ZALO_REFUND_ENDPOINT`       | Endpoint for initiating a refund.                                             |
+| `ZALO_QUERY_STATUS_ENDPOINT` | Endpoint for querying the status of a payment transaction.                    |
+| `ZALO_QUERY_REFUND_ENDPOINT` | Endpoint for querying the status of a refund request.                         |
 
 ## Compile and run the project
 
@@ -164,25 +164,25 @@ Same as send-zns, but phone should be a hashed value.
 
 # ZaloPay API
 
-### CreateOrderDto
+### CreateTransactionDto
 
 | Field                     | Type              | Required | Description                                                              |
 | ------------------------- | ----------------- | -------- | ------------------------------------------------------------------------ |
 | `app_id`                  | Integer           | ✔       | ZaloPay Application ID                                                   |
 | `app_user`                | String            | ✔       | User identifier in your system                                           |
 | `app_trans_id`            | String            | ✔       | Unique transaction ID (must start with `yymmdd`, Vietnam timezone GMT+7) |
-| `app_time`                | Long              | ✔       | Unix timestamp (milliseconds) of order creation                          |
-| `expire_duration_seconds` | Long              | ✘        | Order expiration (in seconds, min: 300, max: 2592000)                    |
-| `amount`                  | Long              | ✔       | Order amount in VND                                                      |
-| `item`                    | JSON Array String | ✔       | Order items                                                              |
+| `app_time`                | Long              | ✔       | Unix timestamp (milliseconds) of transaction creation                    |
+| `expire_duration_seconds` | Long              | ✘        | transaction expiration (in seconds, min: 300, max: 2592000)              |
+| `amount`                  | Long              | ✔       | transaction amount in VND                                                |
+| `item`                    | JSON Array String | ✔       | transaction items                                                        |
 | `description`             | String            | ✔       | Description shown in ZaloPay UI and dashboard                            |
 | `embed_data`              | JSON String       | ✔       | Custom data to be returned in callback                                   |
 | `bank_code`               | String            | ✔ (\*)  | Bank code (optional for ZaloPay Wallet)                                  |
-| `mac`                     | String            | ✔       | HMAC signature for order verification                                    |
+| `mac`                     | String            | ✔       | HMAC signature for transaction verification                              |
 | `callback_url`            | String            | ✘        | Override default callback URL                                            |
 | `device_info`             | JSON String       | ✘        | Device information                                                       |
 | `sub_app_id`              | String            | ✘        | Partner sub-service ID                                                   |
-| `title`                   | String            | ✘        | Order title                                                              |
+| `title`                   | String            | ✘        | transaction title                                                        |
 | `currency`                | String            | ✘        | Default is VND                                                           |
 | `phone`                   | String            | ✘        | User's phone number                                                      |
 | `email`                   | String            | ✘        | User's email                                                             |
@@ -191,7 +191,7 @@ Same as send-zns, but phone should be a hashed value.
 - Đối với mô hình Thanh toán QR, App to App, thì `bank_code` là không bắt buộc
 - Đối với mô hình Mobile Web to App, thì `bank_code` bắt buộc phải là `zalopayapp`
 
-### RefundOrderDto
+### RefundTransactionDto
 
 | Field               | Type   | Required | Description                           |
 | ------------------- | ------ | -------- | ------------------------------------- |
@@ -200,9 +200,9 @@ Same as send-zns, but phone should be a hashed value.
 | `refund_fee_amount` | Number | ✘        | Refund fee (if any)                   |
 | `description`       | String | ✔       | Reason for the refund                 |
 
-## 1. `POST /zalopay/create-order`
+## 1. `POST /zalopay/transactions`
 
-### Request Body (`CreateOrderDto`)
+### Request Body (`CreateTransactionDto`)
 
 ```json
 {
@@ -232,7 +232,7 @@ Same as send-zns, but phone should be a hashed value.
 }
 ```
 
-## 2. `GET /zalopay/order-status/:app_trans_id`
+## 2. `GET /zalopay/transactions/:app_trans_id/status`
 
 ### Example Response
 
@@ -252,7 +252,7 @@ Same as send-zns, but phone should be a hashed value.
 
 ## 3. `POST /zalopay/refund`
 
-### Request Body (`RefundOrderDto`)
+### Request Body (`RefundTransactionDto`)
 
 ```json
 {
@@ -275,7 +275,7 @@ Same as send-zns, but phone should be a hashed value.
 }
 ```
 
-## 4. `GET /zalopay/refund-status/:m_refund_id`
+## 4. `GET /zalopay/refunds/:m_refund_id/status`
 
 ### Example Response
 

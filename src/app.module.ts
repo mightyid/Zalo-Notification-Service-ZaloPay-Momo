@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { RedisModule } from './redis/redis.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ZaloPayModule } from './zalopay/zalopay.module';
+import { MomoModule } from './momo/momo.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ZaloPayModule } from './zalopay/zalopay.module';
     OauthZaloModule,
     RedisModule,
     ZaloPayModule,
+    MomoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
