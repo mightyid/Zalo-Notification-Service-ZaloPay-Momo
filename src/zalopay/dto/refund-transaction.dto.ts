@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class RefundOrderDto {
+export class RefundTransactionDto {
   @IsString()
   @IsNotEmpty()
   zp_trans_id: string;

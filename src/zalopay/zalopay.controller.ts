@@ -1,16 +1,15 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ZaloPayService } from './zalopay.service';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { RefundOrderDto } from './dto/refund-order.dto';
-
+import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { RefundTransactionDto } from './dto/refund-transaction.dto';
 
 @Controller('zalopay')
 export class ZaloPayController {
   constructor(private readonly zaloPayService: ZaloPayService) {}
   //Tạo đơn hàng
-  @Post('create-order')
-  async createOrder(@Body() createOrderDto: CreateOrderDto) {
-    return await this.zaloPayService.createOrder(createOrderDto);
+  @Post('create-transaction')
+  async createTransaction(@Body() createTransactionDto: CreateTransactionDto) {
+    return await this.zaloPayService.createTransaction(createTransactionDto);
   }
 
   //Callback
@@ -21,15 +20,15 @@ export class ZaloPayController {
   }
 
   //Truy vấn trạng thái thanh toán
-  @Get('order-status/:app_trans_id')
-  async orderStatus(@Param('app_trans_id') app_trans_id: string) {
-    return await this.zaloPayService.orderStatus(app_trans_id);
+  @Get('transaction-status/:app_trans_id')
+  async transactionStatus(@Param('app_trans_id') app_trans_id: string) {
+    return await this.zaloPayService.transactionStatus(app_trans_id);
   }
 
   //Hoàn tiền giao dịch
   @Post('refund')
-  async refund(@Body() refundOrderDto: RefundOrderDto) {
-    return await this.zaloPayService.refund(refundOrderDto);
+  async refund(@Body() refundTransactionDto: RefundTransactionDto) {
+    return await this.zaloPayService.refund(refundTransactionDto);
   }
 
   //Truy vấn trạng thái hoàn tiền

@@ -3,8 +3,8 @@ import * as CryptoJS from 'crypto-js';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { format } from 'date-fns-tz';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { RefundOrderDto } from './dto/refund-order.dto';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { RefundTransactionDto } from './dto/refund-transaction.dto';
 
 @Injectable()
 export class ZaloPayService {
@@ -19,19 +19,32 @@ export class ZaloPayService {
     this.app_id = 2554;
     this.key1 = this.configService.get<string>('KEY1')!;
     this.key2 = this.configService.get<string>('KEY2')!;
-    this.create_endpoint = this.configService.get<string>('CREATE_ENDPOINT')!;
+    this.create_endpoint = this.configService.get<string>(
+      'ZALO_CREATE_ENDPOINT',
+    )!;
     this.query_endpoint = this.configService.get<string>('QUERY_ENDPOINT')!;
-    this.refund_endpoint = this.configService.get<string>('REFUND_ENDPOINT')!;
-    this.query_refund_endpoint = this.configService.get<string>('QUERY_REFUND_ENDPOINT')!;
+    this.refund_endpoint = this.configService.get<string>(
+      'ZALO_REFUND_ENDPOINT',
+    )!;
+    this.query_refund_endpoint = this.configService.get<string>(
+      'ZALO_QUERY_REFUND_ENDPOINT',
+    )!;
   }
 
-  async createOrder(dto: CreateOrderDto) {
-    const { app_user, amount, item, bank_code, description, embed_data, ...rest } = dto;
+  async createTransaction(dto: CreateTransactionDto) {
+    const {
+      app_user,
+      amount,
+      item,
+      bank_code,
+      description,
+      embed_data,
+      ...rest
+    } = dto;
 
     const vietnamTime = format(new Date(), 'yyMMdd', {
       timeZone: 'Asia/Ho_Chi_Minh',
     });
-
 
     const app_time = Date.now();
     const app_trans_id = `${vietnamTime}_${Math.floor(Math.random() * 1000000)}`;
@@ -62,8 +75,8 @@ export class ZaloPayService {
       return response.data;
     } catch (err) {
       throw new Error(
-        'Failed to create ZaloPay order: ' + err.response?.data?.message ||
-          err.message,
+        'Failed to create ZaloPay transaction: ' +
+          err.response?.data?.message || err.message,
       );
     }
   }
@@ -78,7 +91,7 @@ export class ZaloPayService {
     }
   }
 
-  async orderStatus(app_trans_id: string) {
+  async transactionStatus(app_trans_id: string) {
     const data = `${this.app_id}|${app_trans_id}|${this.key1}`;
     const mac = CryptoJS.HmacSHA256(data, this.key1).toString();
 
@@ -93,17 +106,17 @@ export class ZaloPayService {
       return response.data;
     } catch (err) {
       throw new Error(
-        'Failed to query order ZaloPay: ' + err.response?.data?.message ||
+        'Failed to query transaction ZaloPay: ' + err.response?.data?.message ||
           err.message,
       );
     }
   }
 
-  async refund(refundOrderDto: RefundOrderDto) {
+  async refund(refundTransactionDto: RefundTransactionDto) {
     const timestamp = Date.now();
 
     const { zp_trans_id, amount, refund_fee_amount, description } =
-      refundOrderDto;
+      refundTransactionDto;
     let data = '';
     if (refund_fee_amount !== undefined && refund_fee_amount !== null) {
       // Nếu có refund_fee_amount thì thêm vào chuỗi data
@@ -141,7 +154,7 @@ export class ZaloPayService {
       return response.data;
     } catch (err) {
       throw new Error(
-        'Failed to refund order ZaloPay: ' + err.response?.data?.message ||
+        'Failed to refund transaction ZaloPay: ' + err.response?.data?.message ||
           err.message,
       );
     }

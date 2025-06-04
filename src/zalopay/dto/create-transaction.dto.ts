@@ -9,7 +9,7 @@ import {
   MaxLength,
 } from 'class-validator';
 
-export class CreateOrderDto {
+export class CreateTransactionDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(50)
