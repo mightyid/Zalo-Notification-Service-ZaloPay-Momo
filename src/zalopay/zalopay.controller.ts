@@ -7,7 +7,7 @@ import { RefundTransactionDto } from './dto/refund-transaction.dto';
 export class ZaloPayController {
   constructor(private readonly zaloPayService: ZaloPayService) {}
   //Tạo đơn hàng
-  @Post('create-transaction')
+  @Post('transactions')
   async createTransaction(@Body() createTransactionDto: CreateTransactionDto) {
     return await this.zaloPayService.createTransaction(createTransactionDto);
   }
@@ -20,19 +20,19 @@ export class ZaloPayController {
   }
 
   //Truy vấn trạng thái thanh toán
-  @Get('transaction-status/:app_trans_id')
+  @Get('transactions/:app_trans_id/status')
   async transactionStatus(@Param('app_trans_id') app_trans_id: string) {
     return await this.zaloPayService.transactionStatus(app_trans_id);
   }
 
   //Hoàn tiền giao dịch
-  @Post('refund')
+  @Post('refunds')
   async refund(@Body() refundTransactionDto: RefundTransactionDto) {
     return await this.zaloPayService.refund(refundTransactionDto);
   }
 
   //Truy vấn trạng thái hoàn tiền
-  @Get('refund-status/:m_refund_id')
+  @Get('refunds/:m_refund_id/status')
   async refundStatus(@Param('m_refund_id') m_refund_id: string) {
     return await this.zaloPayService.refundStatus(m_refund_id);
   }
