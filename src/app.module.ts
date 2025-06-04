@@ -6,6 +6,7 @@ import { OauthZaloModule } from './oauth-zalo/oauth-zalo.module';
 import { ConfigModule } from '@nestjs/config';
 import { RedisModule } from './redis/redis.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ZaloPayModule } from './zalopay/zalopay.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     ZaloNotiModule,
     OauthZaloModule,
     RedisModule,
+    ZaloPayModule,
   ],
   controllers: [AppController],
   providers: [AppService],
