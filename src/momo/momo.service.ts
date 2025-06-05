@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { v4 as uuidv4 } from 'uuid';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import * as crypto from 'crypto';
 import axios from 'axios';
@@ -32,8 +33,7 @@ export class MomoService {
 
   async createTransaction(createTransactionDto: CreateTransactionDto) {
     const { amount, orderId, orderInfo, ...rest } = createTransactionDto;
-
-    const requestId = new Date().getTime().toString();
+    const requestId = uuidv4();
 
     const rawSignature =
       'accessKey=' +
@@ -94,7 +94,7 @@ export class MomoService {
   }
 
   async transactionStatus(orderId: string, lang: string) {
-    const requestId = new Date().getTime().toString();
+    const requestId = uuidv4();
 
     const rawSignature = `accessKey=${this.accessKey}&orderId=${orderId}&partnerCode=${this.partnerCode}&requestId=${requestId}`;
     const signature = crypto
@@ -123,7 +123,7 @@ export class MomoService {
   }
 
   async confirmTransaction(confirmTransactionDto: ConfirmTransactionDto) {
-    const requestId = new Date().getTime().toString();
+    const requestId = uuidv4();
 
     const { orderId, requestType, amount, lang, description } =
       confirmTransactionDto;
@@ -179,7 +179,7 @@ export class MomoService {
   }
 
   async refundTransaction(refundTransactionDto: RefundTransactionDto) {
-    const requestId = new Date().getTime().toString();
+    const requestId = uuidv4();
     const { orderId, amount, lang, transId, description } =
       refundTransactionDto;
 
