@@ -215,16 +215,18 @@ Same as send-zns, but phone should be a hashed value.
 ### Request Body (`CreateTransactionDto`)
 
 ```json
+Cấu hình phương thức thanh toán: `https://docs.zalopay.vn/v2/docs/gateway/guide.html#2-1-theo-cau-truc-moi`
 {
   "app_user": "user123",
   "amount": 999999,
   "item": [],
   "description": "Thanh toán tiền mua hàng",
   "embed_data": {
-    "redirectURL": "https://fb.com/"
+    "redirectURL": "https://fb.com/",
+     "preferred_payment_method": ["domestic_card",  "account"]
   },
   "address": "HCM",
-  "bank_code": "zalopayapp"
+  "bank_code": ""
 }
 ```
 
