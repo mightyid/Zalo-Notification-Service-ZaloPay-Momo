@@ -287,3 +287,229 @@ Same as send-zns, but phone should be a hashed value.
   "sub_return_message": "Giao dịch thành công!"
 }
 ```
+
+# MOMO PAYMENT
+
+#### `CreateTransactionDTO`
+
+| Field         | Type       | Required | Description                                                      |
+| ------------- | ---------- | -------- | ---------------------------------------------------------------- |
+| `storeId`     | `string`   | ❌       | Store ID                                                         |
+| `amount`      | `number`   | ✅       | Amount needs to be paid (min 1000 VND, max 50M VND)              |
+| `orderId`     | `string`   | ✅       | Partner Transaction ID                                           |
+| `orderInfo`   | `string`   | ✅       | Order's information                                              |
+| `items`       | `Object[]` | ❌       | List of products displayed on the payment page.                  |
+| `userInfo`    | `Object`   | ❌       | User Info                                                        |
+| `autoCapture` | `boolean`  | ❌       | If set to false, the payment will not be automatically captured. |
+| `lang`        | `string`   | ❌       | Language of returned message (vi or en)                          |
+
+#### Details of items content
+
+| Field          | Type      | Required | Description                                               |
+| -------------- | --------- | -------- | --------------------------------------------------------- |
+| `id`           | `string`  | ✅       | SKU number                                                |
+| `name`         | `string`  | ✅       | Name of the product                                       |
+| `description`  | `string`  | ❌       | Description of the product                                |
+| `category`     | `string`  | ❌       | Product classification/Product category                   |
+| `imageUrl`     | `string`  | ❌       | Link image of product                                     |
+| `manufacturer` | `string`  | ❌       | Name of manufacturer                                      |
+| `price`        | `long`    | ❌       | Unit price                                                |
+| `currency`     | `string`  | ✅       | Currency: VND                                             |
+| `quantity`     | `integer` | ✅       | Quantity number of the product. It must be greater than 0 |
+| `unit`         | `string`  | ❌       | The units of measurement used for products                |
+| `totalPrice`   | `long`    | ✅       | Total price = price x quantity                            |
+| `taxAmount`    | `long`    | ❌       | Total amount of tax                                       |
+
+#### Example item
+
+```json
+{
+  "id": "204727",
+  "name": "YOMOST Bac Ha&Viet Quat 170ml",
+  "description": "YOMOST Sua Chua Uong Bac Ha&Viet Quat 170ml/1 Hop",
+  "category": "beverage",
+  "imageUrl": "https://momo.vn/uploads/product1.jpg",
+  "manufacturer": "Vinamilk",
+  "price": 11000,
+  "quantity": 5,
+  "unit": "hộp",
+  "totalPrice": 55000,
+  "taxAmount": "200"
+}
+```
+
+#### Details of userInfo content
+
+| Field         | Type     | Required | Description                                                  |
+| ------------- | -------- | -------- | ------------------------------------------------------------ |
+| `name`        | `string` | ❌       | Name of the customer as registered on merchant site          |
+| `phoneNumber` | `string` | ❌       | Phone number of the customer as registered on merchant site  |
+| `email`       | `string` | ❌       | Email address of the customer as registered on merchant site |
+
+#### Example userInfo
+
+```json
+{
+  "name": "Nguyen Van A",
+  "phoneNumber": "0999888999",
+  "email": "email_add@domain.com"
+}
+```
+
+#### `ConfirmTransactionDTO`
+
+| Field         | Type     | Required | Description                                                                                    |
+| ------------- | -------- | -------- | ---------------------------------------------------------------------------------------------- |
+| `amount`      | `number` | ✅       | Amount needs to be paid (min 1000 VND, max 50M VND)                                            |
+| `orderId`     | `string` | ✅       | Partner Transaction                                                                            |
+| `requestType` | `number` | ✅       | Request type, with 2 values: `(Confirm transaction: capture)` - `(Cancel transaction: cancel)` |
+| `lang`        | `string` | ✅       | Language of returned message (vi or en)                                                        |
+| `description` | `number` | ✅       | Reason description (used in the case of rollback)                                              |
+
+#### `RefundTransactionDTO extends ConfirmTransactionDTO`
+
+| Field     | Type     | Required | Description                                                                                    |
+| --------- | -------- | -------- | ---------------------------------------------------------------------------------------------- |
+| `transId` | `number` | ✅       | MoMo's transaction ID. This ID is provided by MoMo when the purchase transaction is successful |
+
+## 1. `POST /momo/transactions`
+
+### Request Body (`CreateTransactionDto`)
+
+```json
+{
+  "storeId": "123456789",
+  "amount": 999999,
+  "orderId": "order123",
+  "orderInfo": "Order thanh toán mua hàng",
+  "items": [
+    {
+      "image": "https://momo.vn/uploads/product1.jpg",
+      "name": "Product 1",
+      "quantity": 1,
+      "amount": 20000
+    },
+    {
+      "image": "https://momo.vn/uploads/product2.jpg",
+      "name": "Product 2",
+      "quantity": 2,
+      "amount": 30000
+    }
+  ],
+  "userInfo": {
+    "username": "hung",
+    "email": "hung@gmail.com"
+  },
+  "autoCapture": false,
+  "lang": "vi",
+  "extraData": ""
+}
+```
+
+### Example Response
+
+```json
+{
+  "partnerCode": "MOMO",
+  "orderId": "order123",
+  "requestId": "1749089000511",
+  "amount": 999999,
+  "responseTime": 1749089000488,
+  "message": "Thành công.",
+  "resultCode": 0,
+  "payUrl": "https://test-payment.momo.vn/v2/gateway/pay?t=TU9NT3x1c&s=a64fd2cde92",
+  "shortLink": "https://test-payment.momo.vn/shortlink/Fyg0rgzGAK"
+}
+```
+
+## 2. `POST /momo/transactions/status`
+
+### Request Body
+
+```json
+{
+  "orderId": "order123",
+  "lang": "vi"
+}
+```
+
+### Example Response
+
+```json
+{
+  "partnerCode": "MOMO",
+  "orderId": "order123",
+  "requestId": "1749092115916",
+  "extraData": "",
+  "amount": 999999,
+  "transId": 3305080682,
+  "payType": "qr",
+  "resultCode": 0,
+  "refundTrans": [],
+  "message": "Thành công.",
+  "responseTime": 1749092115905,
+  "lastUpdated": 1749087764933,
+  "signature": null
+}
+```
+
+## 3. `POST /momo/transactions/confirm`
+
+### `Hóa đơn thanh toán chỉ có thể được captured nếu đang ở trạng thái Authorized (resultCode là 9000). Trạng thái authorized chỉ áp dụng cho luồng thanh toán trực tiếp với thẻ quốc tế, ví MoMo với tham số autoCapture được chỉnh giá trị là false.`
+
+### Request Body(`ConfirmTransactionDto`)
+
+```json
+{
+  "orderId": "order123",
+  "requestType": "capture",
+  "amount": 999999,
+  "lang": "vi",
+  "description": "temp"
+}
+```
+
+### Example Response
+
+```json
+{
+  "partnerCode": "MOMO",
+  "orderId": "order123",
+  "requestId": "1749090234701",
+  "amount": 999999,
+  "transId": 3304873833,
+  "resultCode": 0,
+  "message": "Thành công.",
+  "responseTime": 1749090236746,
+  "requestType": "capture"
+}
+```
+
+## 4. `POST /momo/transactions/refund`
+
+### Request Body (`RefundTransactionDto`)
+
+```json
+{
+  "orderId": "refund123",
+  "amount": 10000,
+  "lang": "vi",
+  "description": "temp",
+  "transId": 3305081242
+}
+```
+
+### Example Response
+
+```json
+{
+  "partnerCode": "MOMO",
+  "orderId": "refund123",
+  "requestId": "1749093735514",
+  "amount": 10000,
+  "transId": 3305081242,
+  "resultCode": 0,
+  "message": "Thành công.",
+  "responseTime": 1749093735969
+}
+```
