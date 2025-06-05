@@ -12,20 +12,30 @@ To run this module successfully, you must define the following environment varia
 
 ## Required Variables
 
-| Variable                     | Description                                                                   |
-| ---------------------------- | ----------------------------------------------------------------------------- |
-| `ZALO_APP_ID`                | Your Zalo Official Account (OA) App ID                                        |
-| `ZALO_APP_SECRET`            | The secret key associated with your OA App                                    |
-| `REDIS_PORT`                 | Port number used by Redis (default: `6379`)                                   |
-| `PORT`                       | Port number used by server (default: `3000`)                                  |
-| ---------------------------- | ----------------------------------------------------------------------------- |
-| `APP_ID`                     | ZaloPay application ID provided when registering for integration.             |
-| `KEY1`                       | MAC Key 1 provided by ZaloPay when registering application                    |
-| `KEY2`                       | MAC Key 2 provided by ZaloPay when registering application                    |
-| `ZALO_CREATE_ENDPOINT`       | Endpoint for creating a payment transaction.                                  |
-| `ZALO_REFUND_ENDPOINT`       | Endpoint for initiating a refund.                                             |
-| `ZALO_QUERY_STATUS_ENDPOINT` | Endpoint for querying the status of a payment transaction.                    |
-| `ZALO_QUERY_REFUND_ENDPOINT` | Endpoint for querying the status of a refund request.                         |
+| Variable                     | Description                                                                                              |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `ZALO_APP_ID`                | Your Zalo Official Account (OA) App ID                                                                   |
+| `ZALO_APP_SECRET`            | The secret key associated with your OA App                                                               |
+| `REDIS_PORT`                 | Port number used by Redis (default: `6379`)                                                              |
+| `PORT`                       | Port number used by server (default: `3000`)                                                             |
+| ZALO                         | -----------------------------------------------------------------------------                            |
+| `APP_ID`                     | ZaloPay application ID provided when registering for integration.                                        |
+| `KEY1`                       | MAC Key 1 provided by ZaloPay when registering application                                               |
+| `KEY2`                       | MAC Key 2 provided by ZaloPay when registering application                                               |
+| `ZALO_CREATE_ENDPOINT`       | Endpoint for creating a payment transaction.                                                             |
+| `ZALO_REFUND_ENDPOINT`       | Endpoint for initiating a refund.                                                                        |
+| `ZALO_QUERY_STATUS_ENDPOINT` | Endpoint for querying the status of a payment transaction.                                               |
+| `ZALO_QUERY_REFUND_ENDPOINT` | Endpoint for querying the status of a refund request.                                                    |
+| MOMO                         | -----------------------------------------------------------------------------                            |
+| `PARTNER_CODE`               | Information to define the business account.                                                              |
+| `ACCESS_KEY`                 | Grants access to the MoMo system.                                                                        |
+| `SECRET_KEY`                 | Used to create an electronic signature.                                                                  |
+| `REDIRECT_URL`               | A partner's URL. This URL is used to redirect from MoMo page to partner's page after customer's payment. |
+| `IPN_URL`                    | Partner API. Used by MoMo to submit payment results by IPN method (server-to-server) method              |
+| `MOMO_CREATE_ENDPOINT`       | Endpoint for creating a payment transaction.                                                             |
+| `MOMO_QUERY_STATUS_ENDPOINT` | Endpoint for querying the status of a payment transaction.                                               |
+| `MOMO_CONFIRM_ENDPOINT`      | Endpoint for canceling or capturing a payment transaction.                                               |
+| `MOMO_REFUND_ENDPOINT`       | Endpoint for initiating a refund.                                                                        |
 
 ## Compile and run the project
 
