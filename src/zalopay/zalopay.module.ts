@@ -4,7 +4,6 @@ import { ZaloPayController } from './zalopay.controller';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ConfigModule],
   controllers: [ZaloPayController],
   providers: [ZaloPayService],
   exports: [ZaloPayService],

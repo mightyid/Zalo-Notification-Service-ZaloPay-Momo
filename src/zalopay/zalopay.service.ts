@@ -154,8 +154,8 @@ export class ZaloPayService {
       return response.data;
     } catch (err) {
       throw new Error(
-        'Failed to refund transaction ZaloPay: ' + err.response?.data?.message ||
-          err.message,
+        'Failed to refund transaction ZaloPay: ' +
+          err.response?.data?.message || err.message,
       );
     }
   }
@@ -181,6 +181,32 @@ export class ZaloPayService {
       throw new Error(
         'Failed to query refund ZaloPay: ' + err.response?.data?.message ||
           err.message,
+      );
+    }
+  }
+
+  async getListMerchantBanks() {
+    const reqTime = Date.now();
+    const mac = CryptoJS.HmacSHA256(
+      `${this.app_id}|${reqTime}`,
+      this.key1,
+    ).toString();
+    const body = {
+      appid: this.app_id,
+      reqtime: reqTime,
+      mac,
+    };
+
+    try {
+      const response = await axios.post(
+        'https://sbgateway.zalopay.vn/api/getlistmerchantbanks',
+        body,
+      );
+      return response.data;
+    } catch (err) {
+      throw new Error(
+        'Failed to get list of merchant banks: ' +
+          err.response?.data?.message || err.message,
       );
     }
   }

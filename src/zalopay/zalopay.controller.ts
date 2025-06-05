@@ -36,4 +36,9 @@ export class ZaloPayController {
   async refundStatus(@Param('m_refund_id') m_refund_id: string) {
     return await this.zaloPayService.refundStatus(m_refund_id);
   }
+
+  @Get('getlistmerchantbanks')
+  async getListMerchantBanks() {
+    return await this.zaloPayService.getListMerchantBanks();
+  }
 }
