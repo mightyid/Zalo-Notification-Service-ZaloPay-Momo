@@ -62,7 +62,7 @@ Generates the authorization URL.
 
 | Query param   | Data type | Require | Description                              |
 | ------------- | --------- | ------- | ---------------------------------------- |
-| `redirectUri` | `string`  | yes     | The URL to redirect back to after login. |
+| `redirectUri` | `string`  | ✅      | The URL to redirect back to after login. |
 
 ## Response
 
@@ -82,8 +82,8 @@ Handles the callback from Zalo after the user successfully authorize. Exchanges 
 
 | Name    | Type     | Required | Description                                       |
 | ------- | -------- | -------- | ------------------------------------------------- |
-| `code`  | `string` | Yes      | The authorization code returned by Zalo           |
-| `state` | `string` | Yes      | A state parameter to protect against CSRF attacks |
+| `code`  | `string` | ✅       | The authorization code returned by Zalo           |
+| `state` | `string` | ✅       | A state parameter to protect against CSRF attacks |
 
 ## Example Request
 
@@ -137,7 +137,7 @@ DTO: CreateZaloNotiDto
 
 | Name           | Type     | Required | Description                          |
 | -------------- | -------- | -------- | ------------------------------------ |
-| `access_token` | `string` | Yes      | Zalo access token for authentication |
+| `access_token` | `string` | ✅       | Zalo access token for authentication |
 
 ## Request Body (`CreateZaloNotiDto`)
 
@@ -166,7 +166,7 @@ Sends a ZNS message using a hashed phone number (used for data privacy or compli
 
 | Name           | Type     | Required | Description                          |
 | -------------- | -------- | -------- | ------------------------------------ |
-| `access_token` | `string` | Yes      | Zalo access token for authentication |
+| `access_token` | `string` | ✅       | Zalo access token for authentication |
 
 ## Request Body (`CreateZaloNotiDto`)
 
@@ -178,25 +178,25 @@ Same as send-zns, but phone should be a hashed value.
 
 | Field                     | Type              | Required | Description                                                              |
 | ------------------------- | ----------------- | -------- | ------------------------------------------------------------------------ |
-| `app_id`                  | Integer           | ✔       | ZaloPay Application ID                                                   |
-| `app_user`                | String            | ✔       | User identifier in your system                                           |
-| `app_trans_id`            | String            | ✔       | Unique transaction ID (must start with `yymmdd`, Vietnam timezone GMT+7) |
-| `app_time`                | Long              | ✔       | Unix timestamp (milliseconds) of transaction creation                    |
-| `expire_duration_seconds` | Long              | ✘        | transaction expiration (in seconds, min: 300, max: 2592000)              |
-| `amount`                  | Long              | ✔       | transaction amount in VND                                                |
-| `item`                    | JSON Array String | ✔       | transaction items                                                        |
-| `description`             | String            | ✔       | Description shown in ZaloPay UI and dashboard                            |
-| `embed_data`              | JSON String       | ✔       | Custom data to be returned in callback                                   |
-| `bank_code`               | String            | ✔ (\*)  | Bank code (optional for ZaloPay Wallet)                                  |
-| `mac`                     | String            | ✔       | HMAC signature for transaction verification                              |
-| `callback_url`            | String            | ✘        | Override default callback URL                                            |
-| `device_info`             | JSON String       | ✘        | Device information                                                       |
-| `sub_app_id`              | String            | ✘        | Partner sub-service ID                                                   |
-| `title`                   | String            | ✘        | transaction title                                                        |
-| `currency`                | String            | ✘        | Default is VND                                                           |
-| `phone`                   | String            | ✘        | User's phone number                                                      |
-| `email`                   | String            | ✘        | User's email                                                             |
-| `address`                 | String            | ✘        | User's address                                                           |
+| `app_id`                  | Integer           | ✅       | ZaloPay Application ID                                                   |
+| `app_user`                | String            | ✅       | User identifier in your system                                           |
+| `app_trans_id`            | String            | ✅       | Unique transaction ID (must start with `yymmdd`, Vietnam timezone GMT+7) |
+| `app_time`                | Long              | ✅       | Unix timestamp (milliseconds) of transaction creation                    |
+| `expire_duration_seconds` | Long              | ❌       | transaction expiration (in seconds, min: 300, max: 2592000)              |
+| `amount`                  | Long              | ✅       | transaction amount in VND                                                |
+| `item`                    | JSON Array String | ✅       | transaction items                                                        |
+| `description`             | String            | ✅       | Description shown in ZaloPay UI and dashboard                            |
+| `embed_data`              | JSON String       | ✅       | Custom data to be returned in callback                                   |
+| `bank_code`               | String            | ✅ (\*)  | Bank code (optional for ZaloPay Wallet)                                  |
+| `mac`                     | String            | ✅       | HMAC signature for transaction verification                              |
+| `callback_url`            | String            | ❌       | Override default callback URL                                            |
+| `device_info`             | JSON String       | ❌       | Device information                                                       |
+| `sub_app_id`              | String            | ❌       | Partner sub-service ID                                                   |
+| `title`                   | String            | ❌       | transaction title                                                        |
+| `currency`                | String            | ❌       | Default is VND                                                           |
+| `phone`                   | String            | ❌       | User's phone number                                                      |
+| `email`                   | String            | ❌       | User's email                                                             |
+| `address`                 | String            | ❌       | User's address                                                           |
 
 - Đối với mô hình Thanh toán QR, App to App, thì `bank_code` là không bắt buộc
 - Đối với mô hình Mobile Web to App, thì `bank_code` bắt buộc phải là `zalopayapp`
@@ -205,17 +205,21 @@ Same as send-zns, but phone should be a hashed value.
 
 | Field               | Type   | Required | Description                           |
 | ------------------- | ------ | -------- | ------------------------------------- |
-| `zp_trans_id`       | String | ✔       | ZaloPay transaction ID to be refunded |
-| `amount`            | Number | ✔       | Amount to be refunded in VND          |
-| `refund_fee_amount` | Number | ✘        | Refund fee (if any)                   |
-| `description`       | String | ✔       | Reason for the refund                 |
+| `zp_trans_id`       | String | ✅       | ZaloPay transaction ID to be refunded |
+| `amount`            | Number | ✅       | Amount to be refunded in VND          |
+| `refund_fee_amount` | Number | ❌       | Refund fee (if any)                   |
+| `description`       | String | ✅       | Reason for the refund                 |
 
 ## 1. `POST /zalopay/transactions`
+
+- Cấu hình phương thức thanh toán: `https://docs.zalopay.vn/v2/docs/gateway/guide.html#2-1-theo-cau-truc-moi`
+- Đối với mô hình Thanh toán QR, App to App, thì bank_code là không bắt buộc
+- Đối với mô hình Mobile Web to App, thì bank_code bắt buộc phải là zalopayapp
+- Đối với mô hình Cổng ZaloPay, thì xem thêm [ở đây](https://docs.zalopay.vn/v2/docs/gateway/api.html#lay-danh-sach-cac-ngan-hang-duoc-ho-tro)
 
 ### Request Body (`CreateTransactionDto`)
 
 ```json
-Cấu hình phương thức thanh toán: `https://docs.zalopay.vn/v2/docs/gateway/guide.html#2-1-theo-cau-truc-moi`
 {
   "app_user": "user123",
   "amount": 999999,
@@ -223,7 +227,7 @@ Cấu hình phương thức thanh toán: `https://docs.zalopay.vn/v2/docs/gatewa
   "description": "Thanh toán tiền mua hàng",
   "embed_data": {
     "redirectURL": "https://fb.com/",
-     "preferred_payment_method": ["domestic_card",  "account"]
+    "preferred_payment_method": ["domestic_card", "account"]
   },
   "address": "HCM",
   "bank_code": ""
